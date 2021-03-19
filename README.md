@@ -1,0 +1,2 @@
+- [Week report](/WEEK_REPORT.md)
+- [Assignment doc](/ASSIGNMENT.md)
