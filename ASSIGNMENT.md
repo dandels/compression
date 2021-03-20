@@ -16,7 +16,7 @@ PNG, ZIP, MP3 and JPEG, making it useful common knowledge[[1]](https://en.wikipe
 
 # Usage & input
 The program will be a command line application based on the Rust
-[[clap]](https://docs.rs/clap/2.33.3/clap/index.html) library. The program will
+[clap](https://docs.rs/clap/2.33.3/clap/index.html) library. The program will
 accept at least one input file, but ideally it would take multiple files and
 directories and compress them all. The created archive should be uncompressable
 with a different command line argument.
