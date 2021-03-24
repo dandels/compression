@@ -1,4 +1,4 @@
 [![Build Status](https://travis-ci.com/dandels/compression.svg?branch=master)](https://travis-ci.org/dandels/compression)
-[![codecov](https://codecov.io/gh/dandels/compression/branch/master/graph/badge.svg)](https://codecov.io/gh/dandels/compression)
+[![codecov](https://codecov.io/gh/dandels/compression/branch/main/graph/badge.svg?token=IUXZECTN2V)](https://codecov.io/gh/dandels/compression)
 - [Week report](/WEEK_REPORT.md)
 - [Assignment doc](/ASSIGNMENT.md)
