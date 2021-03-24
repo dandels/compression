@@ -5,4 +5,5 @@ spent on finding answers to the questions required for the assignment doc.
 
 # Week 2
 - Spent 2h writing the command line parsing
-- Spent 9h figuring out the horror that is reimplementing Vec.
+- Spent 10h figuring out the horror that is reimplementing Vec.
+- Spent 1h setting up code coverage
