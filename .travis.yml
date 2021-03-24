@@ -1,14 +1,13 @@
 language: rust
 
-sudo: required
-
 rust:
   - nightly
 
-matrix:
+jobs:
   allow_failures:
     - rust: nightly
 
+os: linux
 dist: focal
 addons:
   apt:
