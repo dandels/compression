@@ -1,69 +1,33 @@
-use clap::{App, Arg, ArgGroup, ArgMatches};
+#![feature(ptr_internals)]
+#![feature(allocator_api)]
+#![feature(alloc_layout_extra)]
 
-const ARG_COMPRESS: &str = "compress";
-const ARG_EXTRACT: &str = "extract";
-const ARG_HUFFMAN: &str = "huffman";
-const ARG_LZ: &str = "lempel-ziv"; // TODO decide which variant of LZ
-const ARG_OUTPUT: &str = "output-ziv";
+mod cmd;
+mod compress;
+mod list;
 
-const GROUP_ALGORITHM: &str = "algorithm";
-const GROUP_MODE: &str = "mode";
-
-const VAL_ARCHIVE: &str = "archive";
-const VAL_COMPRESS: &str = "files";
-const VAL_OUTPUT: &str = "path";
+use compress::Algorithm;
 
 fn main() {
-    /* Clap is the standard Rust library for parsing command line arguments. It automatically generates helptext from
-     * the command line arguments.
-     * Library documentation: https://docs.rs/clap/2.33.3/clap/index.html
-     *
-     * Takes a mode of operation: compression or extraction.
-     */
-    let arg_matches = App::new(clap::crate_name!())
-        .version(clap::crate_version!())
-        .about("An implementation of Huffman coding and Lempel-Ziv compression.")
-        .arg(
-            Arg::with_name(ARG_EXTRACT)
-                .takes_value(true)
-                .value_name(VAL_ARCHIVE)
-                .help("Extract archive")
-                .short("x"),
-        )
-        .arg(
-            Arg::with_name(ARG_COMPRESS)
-                .takes_value(true)
-                .value_name(VAL_COMPRESS)
-                .multiple(true)
-                .help("Files & directories to compress")
-                .short("c")
-                .requires(GROUP_ALGORITHM)
-                .requires(ARG_OUTPUT),
-        )
-        .arg(
-            Arg::with_name(ARG_HUFFMAN)
-                .short("H")
-                .help("Use Huffman coding for compression"),
-        )
-        .arg(
-            Arg::with_name(ARG_LZ)
-                .short("L")
-                .help("Use Lempel-Ziv for compression"),
-        )
-        .arg(
-            Arg::with_name(ARG_OUTPUT)
-                .short("o")
-                .help("Archive to create.")
-                .takes_value(true)
-                .value_name(VAL_OUTPUT),
-        )
-        .group(
-            ArgGroup::with_name(GROUP_MODE)
-                .args(&[ARG_EXTRACT, ARG_COMPRESS])
-                .required(true),
-        )
-        .group(ArgGroup::with_name(GROUP_ALGORITHM).args(&[ARG_HUFFMAN, ARG_LZ]))
-        .get_matches();
+    let args = cmd::args();
 
-    println!("Hello, world!");
+    if let Some(files) = args.values_of(cmd::ARG_COMPRESS) {
+        let algo: Algorithm;
+        if args.is_present(cmd::ARG_HUFFMAN) {
+            algo = Algorithm::Huffman;
+        } else if args.is_present(cmd::ARG_LZ) {
+            algo = Algorithm::LZ;
+        } else {
+            panic!("Unexpected command line arguments, clap should enforce exactly one compression algorithm is set.");
+        }
+
+        // Manually reconstruct the arg list in an ugly way because our List type doesn't support all features it should
+        let mut list = list::List::new();
+
+        for f in files {
+            list.push(f);
+        }
+
+        compress::compress(list, algo);
+    }
 }
